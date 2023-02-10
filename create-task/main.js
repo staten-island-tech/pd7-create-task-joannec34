@@ -5,6 +5,8 @@ const DOMSelectors = {
   section: document.querySelector("#api-reponse"),
   toggleHist: document.querySelector("#hist-btn"),
   histSection: document.querySelector("#history"),
+  userInput: document.querySelector("#user-input"),
+  form: document.querySelector("#form"),
 };
 
 const histSection = DOMSelectors.histSection;
@@ -20,6 +22,7 @@ async function fetchData(url, id) {
     const response = await fetch(url);
     const rawData = await response.json();
     display(rawData, DOMSelectors.section);
+    afterGuess(rawData);
     console.log(rawData);
   } catch (error) {
     console.log(error);
@@ -29,4 +32,11 @@ fetchData(url, id);
 
 function display(arr, div) {
   div.innerHTML = `<img src="${arr.sprites.front_default}" alt="">`;
+}
+
+function afterGuess(arr) {
+  DOMSelectors.form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    console.log(arr.name);
+  });
 }
