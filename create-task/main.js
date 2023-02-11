@@ -21,6 +21,7 @@ async function fetchData(url, id) {
   try {
     const response = await fetch(url);
     const rawData = await response.json();
+    console.log(rawData.name);
     display(rawData, DOMSelectors.section);
     afterGuess(rawData);
     console.log(rawData);
@@ -37,6 +38,14 @@ function display(arr, div) {
 function afterGuess(arr) {
   DOMSelectors.form.addEventListener("submit", function (e) {
     e.preventDefault();
-    console.log(arr.name);
+    let input = DOMSelectors.userInput.value;
+    //console.log(input);
+    if (arr.name.includes(`${input}`)) {
+      console.log("right");
+      DOMSelectors.section.innerHTML = `ur right yay the pokemon is ${arr.name}`;
+    } else {
+      console.log("wrong");
+      DOMSelectors.section.innerHTML = `ur wrong grr the pokemon is ${arr.name}`;
+    }
   });
 }
