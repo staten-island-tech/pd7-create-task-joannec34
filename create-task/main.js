@@ -7,6 +7,7 @@ const DOMSelectors = {
   histSection: document.querySelector("#history"),
   userInput: document.querySelector("#user-input"),
   form: document.querySelector("#form"),
+  resetBtn: document.querySelector("#reset-btn"),
 };
 
 const histSection = DOMSelectors.histSection;
@@ -42,10 +43,20 @@ function afterGuess(arr) {
     //console.log(input);
     if (arr.name.includes(`${input}`)) {
       console.log("right");
-      DOMSelectors.section.innerHTML = `ur right yay the pokemon is ${arr.name}`;
+      DOMSelectors.section.innerHTML = `<img src="${arr.sprites.front_default}" alt=""> ur right yay the pokemon is ${arr.name} <button id="reset-btn">new pokemon</button>`;
     } else {
       console.log("wrong");
-      DOMSelectors.section.innerHTML = `ur wrong grr the pokemon is ${arr.name}`;
+      DOMSelectors.section.innerHTML = `<img src="${arr.sprites.front_default}" alt=""> ur wrong grr the pokemon is ${arr.name} <button id="reset-btn">new pokemon</button>`;
     }
+    reset();
+  });
+}
+
+function reset() {
+  let resetBtn = document.querySelector("#reset-btn");
+  console.log(resetBtn);
+  resetBtn.addEventListener("click", function () {
+    DOMSelectors.section.innerHTML = "";
+    location.reload();
   });
 }
