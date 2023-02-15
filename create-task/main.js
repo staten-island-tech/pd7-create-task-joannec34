@@ -4,7 +4,7 @@ const DOMSelectors = {
   genImage: document.querySelector("#img-btn"),
   body: document.querySelector("#body"),
   section: document.querySelector("#api-reponse"),
-  toggleHist: document.querySelector("#hist-btn"),
+  histBtn: document.querySelector("#hist-btn"),
   histSection: document.querySelector("#history"),
   userInput: document.querySelector("#user-input"),
   form: document.querySelector("#form"),
@@ -14,8 +14,12 @@ const DOMSelectors = {
 const histSection = DOMSelectors.histSection;
 const history = [];
 
-let id = Math.floor(Math.random() * 1000);
+let id = random();
 let url = `https://pokeapi.co/api/v2/pokemon/${id}/`;
+
+function random() {
+  return Math.floor(Math.random() * 1000);
+}
 
 async function fetchData(url, id) {
   console.log(id);
@@ -23,6 +27,8 @@ async function fetchData(url, id) {
   try {
     const response = await fetch(url);
     const rawData = await response.json();
+    history.push(rawData);
+    console.log(history);
     console.log(rawData.name);
     displayPoke(rawData, DOMSelectors.section);
     afterGuess(rawData);
@@ -49,12 +55,12 @@ function afterGuess(arr) {
       console.log("right");
       DOMSelectors.section.innerHTML = `
       <img src="${arr.sprites.front_default}" alt="">
-      <p> ur right yay the pokemon is ${arr.name} </p>`;
+      <p>ur right yay the pokemon is ${arr.name} </p>`;
     } else {
       console.log("wrong");
       DOMSelectors.section.innerHTML = `
       <img src="${arr.sprites.front_default}" alt="">
-      <p> ur wrong grr the pokemon is ${arr.name} </p>`;
+      <p> ur wrong the pokemon is ${arr.name} </p>`;
     }
   });
 }
@@ -65,5 +71,10 @@ function reset() {
   resetBtn.addEventListener("click", function () {
     DOMSelectors.body.innerHTML = "";
     location.reload();
+    console.log(id);
   });
 }
+
+DOMSelectors.histBtn.addEventListener("click", function () {
+  history.forEach((poke) => displayPoke(poke, histSection));
+});
