@@ -21,22 +21,26 @@ function random() {
   return Math.floor(Math.random() * 1000);
 }
 
-async function fetchData(url, id) {
-  console.log(id);
-  console.log(url);
+async function fetchData(url) {
+  let rawData;
+  let dataObj = {};
   try {
     const response = await fetch(url);
-    const rawData = await response.json();
-    history.push(rawData);
-    console.log(history);
-    console.log(rawData.name);
-    displayPoke(rawData, DOMSelectors.section);
-    afterGuess(rawData);
-    console.log(rawData);
-    reset();
+    rawData = await response.json();
+    dataObj.id = rawData.id;
+    dataObj.sprite = rawData.sprites.front_default;
+    dataObj.name = rawData.name;
+    /* history.push(rawData);
+      console.log(history);
+      console.log(rawData.name);
+      displayPoke(rawData, DOMSelectors.section);
+      afterGuess(rawData);
+      console.log(rawData);
+      reset(); */
   } catch (error) {
     console.log(error);
   }
+  return;
 }
 fetchData(url, id);
 
@@ -68,13 +72,16 @@ function afterGuess(arr) {
 function reset() {
   let resetBtn = document.querySelector("#reset-btn");
   console.log(resetBtn);
-  resetBtn.addEventListener("click", function () {
+  resetBtn.addEventListener("click", function (e) {
+    e.preventDefault();
     DOMSelectors.body.innerHTML = "";
-    location.reload();
     console.log(id);
+    fetchData(url, id);
   });
 }
 
-DOMSelectors.histBtn.addEventListener("click", function () {
-  history.forEach((poke) => displayPoke(poke, histSection));
-});
+DOMSelectors.histBtn.onclick = async (e) =>
+  function () {
+    e.preventDefault();
+    console.log("hello");
+  };
