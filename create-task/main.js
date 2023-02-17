@@ -8,7 +8,7 @@ const DOMSelectors = {
   histSection: document.querySelector("#history"),
   userInput: document.querySelector("#user-input"),
   form: document.querySelector("#form"),
-  resetBtn: document.querySelector("#reset-btn"),
+  genBtn: document.querySelector("#gen-btn"),
 };
 
 const histSection = DOMSelectors.histSection;
@@ -21,7 +21,9 @@ function random() {
   return Math.floor(Math.random() * 1000);
 }
 
-async function fetchData(url) {
+async function fetchData(url, id) {
+  console.log(url);
+
   let rawData;
   let dataObj = {};
   try {
@@ -30,55 +32,53 @@ async function fetchData(url) {
     dataObj.id = rawData.id;
     dataObj.sprite = rawData.sprites.front_default;
     dataObj.name = rawData.name;
-    /* history.push(rawData);
-      console.log(history);
-      console.log(rawData.name);
-      displayPoke(rawData, DOMSelectors.section);
-      afterGuess(rawData);
-      console.log(rawData);
-      reset(); */
+    // temp
+    console.log(dataObj);
+    displayPoke(dataObj, DOMSelectors.section);
+    afterGuess(dataObj);
   } catch (error) {
     console.log(error);
   }
   return;
 }
 fetchData(url, id);
+console.log(dataObj);
 
-function displayPoke(arr, div) {
+function displayPoke(obj, div) {
   div.innerHTML = `
-  <img src="${arr.sprites.front_default}">`;
+  <img src="${obj.sprite}">`;
 }
+//displayPoke(dataObj, DOMSelectors.section);
 
-function afterGuess(arr) {
+function afterGuess(obj) {
   DOMSelectors.form.addEventListener("submit", function (event) {
     event.preventDefault();
     DOMSelectors.form.remove();
     let input = DOMSelectors.userInput.value;
     //console.log(input);
-    if (arr.name.includes(`${input}`)) {
+    if (obj.name.includes(`${input}`)) {
       console.log("right");
       DOMSelectors.section.innerHTML = `
-      <img src="${arr.sprites.front_default}" alt="">
-      <p>ur right yay the pokemon is ${arr.name} </p>`;
+      <img src="${obj.sprite}" alt="">
+      <p>ur right yay the pokemon is ${obj.name} </p>`;
     } else {
       console.log("wrong");
       DOMSelectors.section.innerHTML = `
-      <img src="${arr.sprites.front_default}" alt="">
-      <p> ur wrong the pokemon is ${arr.name} </p>`;
+      <img src="${obj.sprite}" alt="">
+      <p> ur wrong the pokemon is ${obj.name} </p>`;
     }
   });
 }
 
-function reset() {
-  let resetBtn = document.querySelector("#reset-btn");
-  console.log(resetBtn);
-  resetBtn.addEventListener("click", function (e) {
+//fix this
+console.log(DOMSelectors.genBtn);
+DOMSelectors.genBtn.onclick = async (e) =>
+  function () {
     e.preventDefault();
     DOMSelectors.body.innerHTML = "";
-    console.log(id);
+    console.log(url);
     fetchData(url, id);
-  });
-}
+  };
 
 DOMSelectors.histBtn.onclick = async (e) =>
   function () {
