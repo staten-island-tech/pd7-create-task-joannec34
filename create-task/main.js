@@ -1,18 +1,20 @@
 import "./style.css";
 
 const DOMSelectors = {
-  section: document.querySelector("#section"),
-  apiResponse: document.querySelector("#api-reponse"),
-  toggleHist: document.querySelector("#hist-btn"),
-  userInput: document.querySelector("#user-input"),
-  form: document.querySelector("#form"),
+  apiResponse: document.querySelector("#api-response"),
+  results: document.querySelector("#results"),
+  //
   genPoke: document.querySelector("#poke-btn"),
+  toggleHist: document.querySelector("#hist-btn"),
+  //
+  form: document.querySelector("#form"),
+  userInput: document.querySelector("#user-input"),
 };
 
 const history = [];
 
 function createId() {
-  return Math.floor(Math.random() * 150);
+  return Math.floor(Math.random() * 1000);
 }
 
 async function fetchData(id) {
@@ -29,7 +31,7 @@ async function fetchData(id) {
 
     console.log(dataObj);
     displayPoke(dataObj);
-    afterGuess(dataObj);
+    afterGuess(dataObj, history);
     history.push(dataObj);
   } catch (error) {
     console.log(error);
@@ -40,26 +42,33 @@ fetchData(createId());
 
 function displayPoke(poke) {
   DOMSelectors.apiResponse.innerHTML = `
-  <img src="${poke.sprite}">`;
+  <img class="hidden" src="${poke.sprite}">`;
+  DOMSelectors.results.innerHTML = "";
+  DOMSelectors.userInput.value = "";
+  DOMSelectors.form.style.visibility = "visible";
 }
 
-function afterGuess(poke) {
+function afterGuess(poke, history) {
   DOMSelectors.form.addEventListener("submit", function (event) {
     event.preventDefault();
-    DOMSelectors.form.remove();
+    //so for some reason the input value doesnt work anymore after the first submit so pls help :((
     let input = DOMSelectors.userInput.value;
-    //console.log(input);
-    if (poke.name.includes(`${input}`)) {
-      console.log("right");
-      DOMSelectors.section.innerHTML = `
-      <img src="${poke.sprite}" alt="">
-      <p>ur right yay the pokemon is ${poke.name} </p>`;
+    let latest = history[history.length - 1];
+    console.log(input);
+    console.log(latest.name);
+    if (input.includes(latest.name)) {
+      //console.log("right");
+      DOMSelectors.apiResponse.innerHTML = `<img src="${poke.sprite}">`;
+      DOMSelectors.results.innerHTML = `<p>ur right yay the pokemon is ${poke.name} </p>`;
+      latest.result = true; //applies true if u get it right
     } else {
-      console.log("wrong");
-      DOMSelectors.section.innerHTML = `
-      <img src="${poke.sprite}" alt="">
-      <p> ur wrong the pokemon is ${poke.name} </p>`;
+      //console.log("wrong");
+      DOMSelectors.apiResponse.innerHTML = `<img src="${poke.sprite}">`;
+      DOMSelectors.results.innerHTML = `<p>no ur wrong the pokemon is ${poke.name} </p>`;
     }
+    console.log(history);
+    DOMSelectors.form.style.visibility = "hidden";
+    DOMSelectors.userInput.value = "";
   });
 }
 
@@ -70,13 +79,23 @@ DOMSelectors.genPoke.addEventListener("click", async function (e) {
 
 DOMSelectors.toggleHist.onclick = () => {
   console.log(history);
+  DOMSelectors.results.innerHTML = "";
   DOMSelectors.apiResponse.innerHTML = "";
   const createhistory = function (poke) {
-    DOMSelectors.apiResponse.insertAdjacentHTML(
-      "beforeend",
-      `<img src="${poke.sprite}" alt="">
-      <p>${poke.name}</p>`
-    );
+    if (poke.result === true) {
+      DOMSelectors.apiResponse.insertAdjacentHTML(
+        "beforeend",
+        `<img src="${poke.sprite}" alt="">
+      <p>${poke.name}, right</p>`
+      );
+    } else {
+      DOMSelectors.apiResponse.insertAdjacentHTML(
+        "beforeend",
+        `<img src="${poke.sprite}" alt="">
+        <p>${poke.name}, wrong</p>`
+      );
+    }
   };
   history.forEach((poke) => createhistory(poke));
+  DOMSelectors.form.style.visibility = "hidden";
 };

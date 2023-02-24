@@ -5,3 +5,7 @@ img {
 body {
     font-size: 50px;
 }
+
+.hidden {
+    filter: brightness(0%);
+}
