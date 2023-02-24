@@ -1,28 +1,22 @@
 import "./style.css";
 
 const DOMSelectors = {
-  genImage: document.querySelector("#img-btn"),
-  body: document.querySelector("#body"),
-  section: document.querySelector("#api-reponse"),
-  histBtn: document.querySelector("#hist-btn"),
-  histSection: document.querySelector("#history"),
+  section: document.querySelector("#section"),
+  apiResponse: document.querySelector("#api-reponse"),
+  toggleHist: document.querySelector("#hist-btn"),
   userInput: document.querySelector("#user-input"),
   form: document.querySelector("#form"),
-  genBtn: document.querySelector("#gen-btn"),
+  genPoke: document.querySelector("#poke-btn"),
 };
 
-const histSection = DOMSelectors.histSection;
 const history = [];
 
-let id = random();
-let url = `https://pokeapi.co/api/v2/pokemon/${id}/`;
-
-function random() {
-  return Math.floor(Math.random() * 1000);
+function createId() {
+  return Math.floor(Math.random() * 150);
 }
 
-async function fetchData(url, id) {
-  console.log(url);
+async function fetchData(id) {
+  let url = `https://pokeapi.co/api/v2/pokemon/${id}/`;
 
   let rawData;
   let dataObj = {};
@@ -32,56 +26,57 @@ async function fetchData(url, id) {
     dataObj.id = rawData.id;
     dataObj.sprite = rawData.sprites.front_default;
     dataObj.name = rawData.name;
-    // temp
+
     console.log(dataObj);
-    displayPoke(dataObj, DOMSelectors.section);
+    displayPoke(dataObj);
     afterGuess(dataObj);
+    history.push(dataObj);
   } catch (error) {
     console.log(error);
   }
   return;
 }
-fetchData(url, id);
-console.log(dataObj);
+fetchData(createId());
 
-function displayPoke(obj, div) {
-  div.innerHTML = `
-  <img src="${obj.sprite}">`;
+function displayPoke(poke) {
+  DOMSelectors.apiResponse.innerHTML = `
+  <img src="${poke.sprite}">`;
 }
-//displayPoke(dataObj, DOMSelectors.section);
 
-function afterGuess(obj) {
+function afterGuess(poke) {
   DOMSelectors.form.addEventListener("submit", function (event) {
     event.preventDefault();
     DOMSelectors.form.remove();
     let input = DOMSelectors.userInput.value;
     //console.log(input);
-    if (obj.name.includes(`${input}`)) {
+    if (poke.name.includes(`${input}`)) {
       console.log("right");
       DOMSelectors.section.innerHTML = `
-      <img src="${obj.sprite}" alt="">
-      <p>ur right yay the pokemon is ${obj.name} </p>`;
+      <img src="${poke.sprite}" alt="">
+      <p>ur right yay the pokemon is ${poke.name} </p>`;
     } else {
       console.log("wrong");
       DOMSelectors.section.innerHTML = `
-      <img src="${obj.sprite}" alt="">
-      <p> ur wrong the pokemon is ${obj.name} </p>`;
+      <img src="${poke.sprite}" alt="">
+      <p> ur wrong the pokemon is ${poke.name} </p>`;
     }
   });
 }
 
-//fix this
-console.log(DOMSelectors.genBtn);
-DOMSelectors.genBtn.onclick = async (e) =>
-  function () {
-    e.preventDefault();
-    DOMSelectors.body.innerHTML = "";
-    console.log(url);
-    fetchData(url, id);
-  };
+DOMSelectors.genPoke.addEventListener("click", async function (e) {
+  e.preventDefault();
+  await fetchData(createId());
+});
 
-DOMSelectors.histBtn.onclick = async (e) =>
-  function () {
-    e.preventDefault();
-    console.log("hello");
+DOMSelectors.toggleHist.onclick = () => {
+  console.log(history);
+  DOMSelectors.apiResponse.innerHTML = "";
+  const createhistory = function (poke) {
+    DOMSelectors.apiResponse.insertAdjacentHTML(
+      "beforeend",
+      `<img src="${poke.sprite}" alt="">
+      <p>${poke.name}</p>`
+    );
   };
+  history.forEach((poke) => createhistory(poke));
+};
