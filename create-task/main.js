@@ -49,20 +49,20 @@ function displayPoke(poke) {
 }
 
 function afterGuess(poke, history) {
+  //ADD EVENT LISTENER ADDS MULTIPLE TIMES BAD GET RID SPLIT FCUNTION AND EVENT LISTENER UP
   DOMSelectors.form.addEventListener("submit", function (event) {
     event.preventDefault();
-    //so for some reason the input value doesnt work anymore after the first submit so pls help :((
     let input = DOMSelectors.userInput.value;
     let latest = history[history.length - 1];
-    console.log(input);
-    console.log(latest.name);
+    console.log(`input: ${input}`);
+    console.log(`answer: ${latest.name}`);
     if (input.includes(latest.name)) {
-      //console.log("right");
+      console.log("right");
       DOMSelectors.apiResponse.innerHTML = `<img src="${poke.sprite}">`;
       DOMSelectors.results.innerHTML = `<p>ur right yay the pokemon is ${poke.name} </p>`;
       latest.result = true; //applies true if u get it right
     } else {
-      //console.log("wrong");
+      console.log("wrong");
       DOMSelectors.apiResponse.innerHTML = `<img src="${poke.sprite}">`;
       DOMSelectors.results.innerHTML = `<p>no ur wrong the pokemon is ${poke.name} </p>`;
     }
