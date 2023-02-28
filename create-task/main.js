@@ -8,6 +8,7 @@ const DOMSelectors = {
   toggleHist: document.querySelector("#hist-btn"),
   //
   form: document.querySelector("#form"),
+  submitBtn: document.querySelector("#submit-btn"),
   userInput: document.querySelector("#user-input"),
 };
 
@@ -48,10 +49,8 @@ function displayPoke(poke) {
   DOMSelectors.form.style.visibility = "visible";
 }
 
-function afterGuess(poke, history) {
-  //ADD EVENT LISTENER ADDS MULTIPLE TIMES BAD GET RID SPLIT FCUNTION AND EVENT LISTENER UP
-  DOMSelectors.form.addEventListener("submit", function (event) {
-    event.preventDefault();
+function afterGuess(poke) {
+  DOMSelectors.submitBtn.onclick = () => {
     let input = DOMSelectors.userInput.value;
     let latest = history[history.length - 1];
     console.log(`input: ${input}`);
@@ -69,8 +68,12 @@ function afterGuess(poke, history) {
     console.log(history);
     DOMSelectors.form.style.visibility = "hidden";
     DOMSelectors.userInput.value = "";
-  });
+  };
 }
+
+DOMSelectors.form.addEventListener("submit", function (e) {
+  e.preventDefault();
+});
 
 DOMSelectors.genPoke.addEventListener("click", async function (e) {
   e.preventDefault();
