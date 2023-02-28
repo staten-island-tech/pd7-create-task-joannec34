@@ -3,10 +3,10 @@ import "./style.css";
 const DOMSelectors = {
   apiResponse: document.querySelector("#api-response"),
   results: document.querySelector("#results"),
-  //
+  //buttons
   genPoke: document.querySelector("#poke-btn"),
   toggleHist: document.querySelector("#hist-btn"),
-  //
+  //form stuff
   form: document.querySelector("#form"),
   submitBtn: document.querySelector("#submit-btn"),
   userInput: document.querySelector("#user-input"),
@@ -30,14 +30,13 @@ async function fetchData(id) {
     dataObj.sprite = rawData.sprites.front_default;
     dataObj.name = rawData.name;
 
-    console.log(dataObj);
+    //console.log(dataObj);
     displayPoke(dataObj);
-    afterGuess(dataObj, history);
+    afterGuess(dataObj);
     history.push(dataObj);
   } catch (error) {
     console.log(error);
   }
-  return;
 }
 fetchData(createId());
 
@@ -45,7 +44,6 @@ function displayPoke(poke) {
   DOMSelectors.apiResponse.innerHTML = `
   <img class="hidden" src="${poke.sprite}">`;
   DOMSelectors.results.innerHTML = "";
-  DOMSelectors.userInput.value = "";
   DOMSelectors.form.style.visibility = "visible";
 }
 
@@ -66,8 +64,8 @@ function afterGuess(poke) {
       DOMSelectors.results.innerHTML = `<p>no ur wrong the pokemon is ${poke.name} </p>`;
     }
     console.log(history);
-    DOMSelectors.form.style.visibility = "hidden";
     DOMSelectors.userInput.value = "";
+    DOMSelectors.form.style.visibility = "hidden";
   };
 }
 
