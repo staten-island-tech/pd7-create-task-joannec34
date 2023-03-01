@@ -6,18 +6,20 @@ const DOMSelectors = {
   //buttons
   genPoke: document.querySelector("#poke-btn"),
   toggleHist: document.querySelector("#hist-btn"),
-  //form stuff
+  //form
   form: document.querySelector("#form"),
   submitBtn: document.querySelector("#submit-btn"),
   userInput: document.querySelector("#user-input"),
 };
 
-const history = [];
+const history = []; //store history of pokemon guesses
 
+//generates a random id for a pokemon
 function createId() {
   return Math.floor(Math.random() * 1000);
 }
 
+//fetch pokemon data from api
 async function fetchData(id) {
   let url = `https://pokeapi.co/api/v2/pokemon/${id}/`;
 
@@ -30,19 +32,23 @@ async function fetchData(id) {
     dataObj.sprite = rawData.sprites.front_default;
     dataObj.name = rawData.name;
 
-    //console.log(dataObj);
+    //display the pokemon and enable guessing
     displayPoke(dataObj);
     afterGuess(dataObj);
-    history.push(dataObj);
+
+    console.log(dataObj);
+    history.push(dataObj); //adds pokemon to the history
   } catch (error) {
     console.log(error);
   }
 }
-fetchData(createId());
+fetchData(createId()); //fetch data for pokemon on page load
 
+//displays the pokemon on the page
 function displayPoke(poke) {
   DOMSelectors.apiResponse.innerHTML = `
   <img class="hidden" src="${poke.sprite}">`;
+
   DOMSelectors.results.innerHTML = "";
   DOMSelectors.form.style.visibility = "visible";
 }
@@ -51,35 +57,39 @@ function afterGuess(poke) {
   DOMSelectors.submitBtn.onclick = () => {
     let input = DOMSelectors.userInput.value;
     let latest = history[history.length - 1];
-    console.log(`input: ${input}`);
-    console.log(`answer: ${latest.name}`);
+    //console.log(`input: ${input}`);
+    //console.log(`answer: ${latest.name}`);
     if (input.includes(latest.name)) {
-      console.log("right");
+      console.log("right"); //right guess
       DOMSelectors.apiResponse.innerHTML = `<img src="${poke.sprite}">`;
       DOMSelectors.results.innerHTML = `<p>ur right yay the pokemon is ${poke.name} </p>`;
-      latest.result = true; //applies true if u get it right
+      latest.result = true; //applies true if user guesses correctly
     } else {
-      console.log("wrong");
+      console.log("wrong"); //wrong guess
       DOMSelectors.apiResponse.innerHTML = `<img src="${poke.sprite}">`;
       DOMSelectors.results.innerHTML = `<p>no ur wrong the pokemon is ${poke.name} </p>`;
     }
-    console.log(history);
+
+    //reset input and hide form
     DOMSelectors.userInput.value = "";
     DOMSelectors.form.style.visibility = "hidden";
   };
 }
 
+//prevents form from submitting on page reload
 DOMSelectors.form.addEventListener("submit", function (e) {
   e.preventDefault();
 });
 
+//event listener for generating new pokemon
 DOMSelectors.genPoke.addEventListener("click", async function (e) {
   e.preventDefault();
   await fetchData(createId());
 });
 
+//displays pokemon history and whether user guessed the pokemon correctly or not
 DOMSelectors.toggleHist.onclick = () => {
-  console.log(history);
+  //console.log(history);
   DOMSelectors.results.innerHTML = "";
   DOMSelectors.apiResponse.innerHTML = "";
   const createhistory = function (poke) {
