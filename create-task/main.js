@@ -60,12 +60,14 @@ function afterGuess(poke) {
     //console.log(`input: ${input}`);
     //console.log(`answer: ${latest.name}`);
     if (input.includes(latest.name)) {
-      console.log("right"); //right guess
+      //right guess
+      //console.log("right");
       DOMSelectors.apiResponse.innerHTML = `<img src="${poke.sprite}">`;
       DOMSelectors.results.innerHTML = `<p>ur right yay the pokemon is ${poke.name} </p>`;
       latest.result = true; //applies true if user guesses correctly
     } else {
-      console.log("wrong"); //wrong guess
+      //wrong guess
+      //console.log("wrong");
       DOMSelectors.apiResponse.innerHTML = `<img src="${poke.sprite}">`;
       DOMSelectors.results.innerHTML = `<p>no ur wrong the pokemon is ${poke.name} </p>`;
     }
