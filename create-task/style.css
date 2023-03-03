@@ -9,3 +9,37 @@ body {
 .hidden {
     filter: brightness(0%);
 }
+
+.btns {
+    font-size: 20px;
+    border: none;
+    border-radius: 50px;
+    background-color:bisque;
+    padding: 10px;
+}
+
+#user-input {
+    padding: 10px;
+}
+
+#hist-response {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.hist-cards {
+    zoom: 0.5;
+    font-size: 40px;
+    margin: 10px;
+    padding: 20px;
+   
+}
+
+.right {
+    background-color: palegreen;
+}
+
+.wrong {
+    background-color: palevioletred;
+}
