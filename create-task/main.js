@@ -50,10 +50,10 @@ function clearBody() {
 }
 
 //displays the pokemon on the page
-function displayPoke(poke, condition) {
+function displayPoke(poke, parameter) {
   clearBody();
   DOMSelectors.form.style.visibility = "visible";
-  if (condition === "hidden") {
+  if (parameter === "hidden") {
     DOMSelectors.apiResponse.innerHTML = `
   <img class="hidden" src="${poke.sprite}">`;
   } else {
