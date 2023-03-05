@@ -69,12 +69,12 @@ function afterGuess(poke) {
     if (input.includes(latest.name)) {
       //right guess
       DOMSelectors.apiResponse.innerHTML = `<img src="${poke.sprite}">`;
-      DOMSelectors.results.innerHTML = `<p>you are right! the pokemon is ${poke.name}</p>`;
+      DOMSelectors.results.innerHTML = `<p>You are correct! The pokémon is ${poke.name}</p>`;
       latest.result = true; //applies true if the user guesses correctly
     } else {
       //wrong guess
       DOMSelectors.apiResponse.innerHTML = `<img src="${poke.sprite}">`;
-      DOMSelectors.results.innerHTML = `<p>you are wrong! the pokemon is ${poke.name}</p>`;
+      DOMSelectors.results.innerHTML = `<p>You are incorrect! The pokémon is ${poke.name}</p>`;
     }
     latest.guess = `${input}`;
     DOMSelectors.userInput.value = "";
@@ -111,7 +111,7 @@ DOMSelectors.toggleHist.onclick = () => {
         "beforeend",
         `<div class="right hist-cards">
         <img src="${poke.sprite}" alt="">
-      <p>this pokemon is ${poke.name}, you were right</p>
+      <p>This pokémon is ${poke.name}, you were right</p>
       </div>`
       );
     } else {
@@ -119,8 +119,8 @@ DOMSelectors.toggleHist.onclick = () => {
         "beforeend",
         `<div class="wrong hist-cards">
         <img src="${poke.sprite}" alt="">
-        <p>this pokemon is ${poke.name}, you were wrong</p>
-        <p>your guess: ${poke.guess}</p>
+        <p>This pokémon is ${poke.name}, you were wrong</p>
+        <p>Your guess: ${poke.guess}</p>
         </div>`
       );
     }
